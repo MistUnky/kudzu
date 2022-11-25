@@ -35,7 +35,7 @@ minetest.register_node("kudzu:ladder", {
 
 minetest.register_on_mods_loaded(function()
 	for node_name, node_definition in pairs(minetest.registered_nodes) do
-		if not (node_name == "ignore" or node_name == nil or node_name == "" or node_name == "air" or node_name == "kudzu:kudzu") then
+		if not (node_name == "ignore" or node_name == nil or node_name == "" or node_name == "air" or node_name == "kudzu:kudzu" or node_name == "fire:basic_flame") then
 			local g = table.copy(node_definition.groups)
 			g.sus = 1
 			minetest.override_item(node_name,{
