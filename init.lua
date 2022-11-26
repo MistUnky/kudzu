@@ -1,3 +1,5 @@
+ENABLE_KUDZU_BIOME = false
+
 minetest.register_node("kudzu:kudzu", {
 	description = "Kudzu",
 	tiles = {"kudzu_kudzu.png"},
@@ -136,13 +138,15 @@ minetest.register_craft({
 	cooktime = 20,
 })
 
-minetest.register_biome({
-	node_top = "kudzu:kudzu",
-	depth_top = 1,
-	node_filler = "default:dirt",
-	depth_filler = 2,
-	y_min = -31000,
-	y_max = 31000,
-	heat_point = 0,
-	humidity_point = 0,
-})
+if ENABLE_KUDZU_BIOME then
+	minetest.register_biome({
+		node_top = "kudzu:kudzu",
+		depth_top = 1,
+		node_filler = "default:dirt",
+		depth_filler = 2,
+		y_min = -31000,
+		y_max = 31000,
+		heat_point = 50,
+		humidity_point = 75,
+	})
+end
