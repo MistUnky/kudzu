@@ -13,6 +13,24 @@ minetest.register_craftitem("kudzu:sticks", {
 	groups = {flammable = 2},
 })
 
+minetest.register_craftitem("kudzu:tea", {
+	description = "Kudzu Tea",
+	inventory_image = "kudzu_tea.png",
+	on_use = minetest.item_eat(1),
+})
+
+minetest.register_craftitem("kudzu:soup", {
+	description = "Kudzu Soup",
+	inventory_image = "kudzu_soup.png",
+	on_use = minetest.item_eat(3),
+})
+
+minetest.register_craftitem("kudzu:jelly", {
+	description = "Kudzu Jelly",
+	inventory_image = "kudzu_jelly.png",
+	on_use = minetest.item_eat(6),
+})
+
 minetest.register_node("kudzu:ladder", {
 	description = "Kudzu Ladder",
 	drawtype = "signlike",
@@ -80,4 +98,28 @@ minetest.register_craft({
 		{"kudzu:sticks", "kudzu:sticks", "kudzu:sticks"},
 		{"kudzu:sticks", "kudzu:sticks", "kudzu:sticks"},
 	}
+})
+
+minetest.register_craft({
+	output = "kudzu:tea",
+	recipe = {
+		{"kudzu:kudzu", "kudzu:kudzu", "kudzu:kudzu"},
+		{"kudzu:kudzu", "bucket:bucket_river_water", "kudzu:kudzu"},
+		{"", "vessels:drinking_glass", ""},
+	},
+	replacements = {{"bucket:bucket_river_water", "bucket:bucket_empty"}},
+})
+
+minetest.register_craft({
+	type = "cooking",
+	output = "kudzu:soup",
+	recipe = "kudzu:tea",
+	cooktime = 10,
+})
+
+minetest.register_craft({
+	type = "cooking",
+	output = "kudzu:jelly",
+	recipe = "kudzu:soup",
+	cooktime = 20,
 })
