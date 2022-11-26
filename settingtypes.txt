@@ -1,0 +1,1 @@
+enable_kudzu_biomes (Enable kudzu biomes around the world) bool false

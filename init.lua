@@ -1,4 +1,4 @@
-ENABLE_KUDZU_BIOME = false
+ENABLE_KUDZU_BIOME = false or minetest.settings:get("enable_kudzu_biome")
 
 minetest.register_node("kudzu:kudzu", {
 	description = "Kudzu",
