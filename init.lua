@@ -16,19 +16,31 @@ minetest.register_craftitem("kudzu:sticks", {
 minetest.register_craftitem("kudzu:tea", {
 	description = "Kudzu Tea",
 	inventory_image = "kudzu_tea.png",
-	on_use = minetest.item_eat(1),
+	on_use = function(itemstack, user, pointed_thing)
+		if user then
+			return minetest.do_item_eat(1, "vessels:drinking_glass", itemstack, user, pointed_thing)
+		end
+	end
 })
 
 minetest.register_craftitem("kudzu:soup", {
 	description = "Kudzu Soup",
 	inventory_image = "kudzu_soup.png",
-	on_use = minetest.item_eat(3),
+	on_use = function(itemstack, user, pointed_thing)
+		if user then
+			return minetest.do_item_eat(3, "vessels:drinking_glass", itemstack, user, pointed_thing)
+		end
+	end
 })
 
 minetest.register_craftitem("kudzu:jelly", {
 	description = "Kudzu Jelly",
 	inventory_image = "kudzu_jelly.png",
-	on_use = minetest.item_eat(6),
+	on_use = function(itemstack, user, pointed_thing)
+		if user then
+			return minetest.do_item_eat(6, "vessels:drinking_glass", itemstack, user, pointed_thing)
+		end
+	end
 })
 
 minetest.register_node("kudzu:ladder", {
