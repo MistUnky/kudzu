@@ -1,1 +1,2 @@
 enable_kudzu_biome (Enable kudzu biomes around the world) bool false
+enable_kudzu_craft (Enable crafting kudzu plants) bool false

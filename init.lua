@@ -1,4 +1,5 @@
 ENABLE_KUDZU_BIOME = false or minetest.settings:get("enable_kudzu_biome")
+ENABLE_KUDZU_CRAFT = false or minetest.settings:get("enable_kudzu_craft")
 
 minetest.register_node("kudzu:kudzu", {
 	description = "Kudzu",
@@ -148,5 +149,17 @@ if ENABLE_KUDZU_BIOME then
 		y_max = 31000,
 		heat_point = 50,
 		humidity_point = 75,
+	})
+end
+
+if ENABLE_KUDZU_CRAFT then
+	minetest.register_craft({
+		output = "kudzu:kudzu",
+		recipe = {
+			{"default:junglegrass", "default:mese", "default:junglegrass"},
+			{"default:mese", "bucket:bucket_water", "default:mese"},
+			{"default:junglegrass", "default:mese", "default:junglegrass"},
+		},
+		replacements = {{"bucket:bucket_water", "bucket:bucket_empty"}}
 	})
 end
