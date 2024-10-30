@@ -1,7 +1,9 @@
-ENABLE_KUDZU_BIOME = false or minetest.settings:get("enable_kudzu_biome")
-ENABLE_KUDZU_CRAFT = false or minetest.settings:get("enable_kudzu_craft")
+ENABLE_KUDZU_BIOME = core.settings:get_bool("enable_kudzu_biome")
+ENABLE_KUDZU_CRAFT = core.settings:get_bool("enable_kudzu_craft")
+ENABLE_FOOD_CRAFT  = core.settings:get_bool("enable_food_craft") ~= false
+ENABLE_OTHER_CRAFT = core.settings:get_bool("enable_other_craft") ~= false
 
-minetest.register_node("kudzu:kudzu", {
+core.register_node("kudzu:kudzu", {
 	description = "Kudzu",
 	tiles = {"kudzu_kudzu.png"},
 	light_source = 1,
@@ -10,43 +12,98 @@ minetest.register_node("kudzu:kudzu", {
 	sounds = default.node_sound_leaves_defaults(),
 })
 
-minetest.register_craftitem("kudzu:sticks", {
-	description = "Kudzu Sticks",
-	inventory_image = "kudzu_sticks.png",
-	groups = {flammable = 2},
-})
-
-minetest.register_craftitem("kudzu:tea", {
-	description = "Kudzu Tea",
-	inventory_image = "kudzu_tea.png",
-	on_use = function(itemstack, user, pointed_thing)
-		if user then
-			return minetest.do_item_eat(1, "vessels:drinking_glass", itemstack, user, pointed_thing)
+if ENABLE_FOOD_CRAFT then
+	core.register_craftitem("kudzu:tea", {
+		description = "Kudzu Tea",
+		inventory_image = "kudzu_tea.png",
+		on_use = function(itemstack, user, pointed_thing)
+			if user then
+				return core.do_item_eat(1, "vessels:drinking_glass", itemstack, user, pointed_thing)
+			end
 		end
-	end
-})
+	})
 
-minetest.register_craftitem("kudzu:soup", {
-	description = "Kudzu Soup",
-	inventory_image = "kudzu_soup.png",
-	on_use = function(itemstack, user, pointed_thing)
-		if user then
-			return minetest.do_item_eat(3, "vessels:drinking_glass", itemstack, user, pointed_thing)
+	core.register_craftitem("kudzu:soup", {
+		description = "Kudzu Soup",
+		inventory_image = "kudzu_soup.png",
+		on_use = function(itemstack, user, pointed_thing)
+			if user then
+				return core.do_item_eat(3, "vessels:drinking_glass", itemstack, user, pointed_thing)
+			end
 		end
-	end
-})
+	})
 
-minetest.register_craftitem("kudzu:jelly", {
-	description = "Kudzu Jelly",
-	inventory_image = "kudzu_jelly.png",
-	on_use = function(itemstack, user, pointed_thing)
-		if user then
-			return minetest.do_item_eat(6, "vessels:drinking_glass", itemstack, user, pointed_thing)
+	core.register_craftitem("kudzu:jelly", {
+		description = "Kudzu Jelly",
+		inventory_image = "kudzu_jelly.png",
+		on_use = function(itemstack, user, pointed_thing)
+			if user then
+				return core.do_item_eat(6, "vessels:drinking_glass", itemstack, user, pointed_thing)
+			end
 		end
-	end
-})
+	})
 
-minetest.register_node("kudzu:ladder", {
+	core.register_craft({
+		output = "kudzu:tea",
+		recipe = {
+			{"kudzu:kudzu", "kudzu:kudzu", "kudzu:kudzu"},
+			{"kudzu:kudzu", "bucket:bucket_river_water", "kudzu:kudzu"},
+			{"", "vessels:drinking_glass", ""},
+		},
+		replacements = {{"bucket:bucket_river_water", "bucket:bucket_empty"}},
+	})
+
+	core.register_craft({
+		type = "cooking",
+		output = "kudzu:soup",
+		recipe = "kudzu:tea",
+		cooktime = 10,
+	})
+
+	core.register_craft({
+		type = "cooking",
+		output = "kudzu:jelly",
+		recipe = "kudzu:soup",
+		cooktime = 20,
+	})
+
+end
+
+
+if ENABLE_OTHER_CRAFT then
+	core.register_craftitem("kudzu:sticks", {
+		description = "Kudzu Sticks",
+		inventory_image = "kudzu_sticks.png",
+		groups = {flammable = 2},
+	})
+
+	core.register_craft({
+		output = "kudzu:sticks",
+		recipe = {
+			{"kudzu:kudzu", "kudzu:kudzu", "kudzu:kudzu"},
+			{"kudzu:kudzu", "kudzu:kudzu", "kudzu:kudzu"},
+			{"kudzu:kudzu", "kudzu:kudzu", "kudzu:kudzu"},
+		}
+	})
+
+	core.register_craft({
+		type = "cooking",
+		output = "default:stick",
+		recipe = "kudzu:sticks",
+		cooktime = 5,
+	})
+
+	core.register_craft({
+		output = "kudzu:ladder",
+		recipe = {
+			{"kudzu:sticks", "kudzu:sticks", "kudzu:sticks"},
+			{"kudzu:sticks", "kudzu:sticks", "kudzu:sticks"},
+			{"kudzu:sticks", "kudzu:sticks", "kudzu:sticks"},
+		}
+	})
+end
+
+core.register_node("kudzu:ladder", {
 	description = "Kudzu Ladder",
 	drawtype = "signlike",
 	tiles = {"kudzu_ladder.png"},
@@ -66,81 +123,32 @@ minetest.register_node("kudzu:ladder", {
 	sounds = default.node_sound_leaves_defaults(),
 })
 
-minetest.register_on_mods_loaded(function()
-	for node_name, node_definition in pairs(minetest.registered_nodes) do
+core.register_on_mods_loaded(function()
+	for node_name, node_definition in pairs(core.registered_nodes) do
 		if not (node_name == "ignore" or node_name == nil or node_name == "" or node_name == "air" or node_name == "kudzu:kudzu" or node_name == "fire:basic_flame") then
 			local g = table.copy(node_definition.groups)
 			g.sus = 1
-			minetest.override_item(node_name,{
+			core.override_item(node_name,{
 				groups = g
 			})
 		end
 	end
 end)
 
-minetest.register_abm({
+core.register_abm({
 	nodenames = {"air"},
 	neighbors = {"group:sus"},
 	interval = 1,
 	chance = 16^2,
 	action = function(pos)
-		if minetest.find_node_near(pos, 1, {"kudzu:kudzu"}) ~= nil then
-			minetest.set_node(pos, {name="kudzu:kudzu"})
+		if core.find_node_near(pos, 1, {"kudzu:kudzu"}) ~= nil then
+			core.set_node(pos, {name="kudzu:kudzu"})
 		end
 	end
 })
 
-minetest.register_craft({
-	output = "kudzu:sticks",
-	recipe = {
-		{"kudzu:kudzu", "kudzu:kudzu", "kudzu:kudzu"},
-		{"kudzu:kudzu", "kudzu:kudzu", "kudzu:kudzu"},
-		{"kudzu:kudzu", "kudzu:kudzu", "kudzu:kudzu"},
-	}
-})
-
-minetest.register_craft({
-	type = "cooking",
-	output = "default:stick",
-	recipe = "kudzu:sticks",
-	cooktime = 5,
-})
-
-minetest.register_craft({
-	output = "kudzu:ladder",
-	recipe = {
-		{"kudzu:sticks", "kudzu:sticks", "kudzu:sticks"},
-		{"kudzu:sticks", "kudzu:sticks", "kudzu:sticks"},
-		{"kudzu:sticks", "kudzu:sticks", "kudzu:sticks"},
-	}
-})
-
-minetest.register_craft({
-	output = "kudzu:tea",
-	recipe = {
-		{"kudzu:kudzu", "kudzu:kudzu", "kudzu:kudzu"},
-		{"kudzu:kudzu", "bucket:bucket_river_water", "kudzu:kudzu"},
-		{"", "vessels:drinking_glass", ""},
-	},
-	replacements = {{"bucket:bucket_river_water", "bucket:bucket_empty"}},
-})
-
-minetest.register_craft({
-	type = "cooking",
-	output = "kudzu:soup",
-	recipe = "kudzu:tea",
-	cooktime = 10,
-})
-
-minetest.register_craft({
-	type = "cooking",
-	output = "kudzu:jelly",
-	recipe = "kudzu:soup",
-	cooktime = 20,
-})
-
 if ENABLE_KUDZU_BIOME then
-	minetest.register_biome({
+	core.register_biome({
 		node_top = "kudzu:kudzu",
 		depth_top = 1,
 		node_filler = "default:dirt",
@@ -153,7 +161,7 @@ if ENABLE_KUDZU_BIOME then
 end
 
 if ENABLE_KUDZU_CRAFT then
-	minetest.register_craft({
+	core.register_craft({
 		output = "kudzu:kudzu",
 		recipe = {
 			{"default:junglegrass", "default:mese", "default:junglegrass"},
