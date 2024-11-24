@@ -1,4 +1,4 @@
 enable_kudzu_biome (Enable kudzu biomes around the world) bool false
 enable_kudzu_craft (Enable crafting kudzu plants) bool false
-enable_food_craft (Enable crafting food) bool true
-enable_other_craft (Enable other crafts) bool true
+enable_kudzu_food_craft (Enable crafting kudzu food) bool true
+enable_kudzu_other_craft (Enable other kudzu crafts) bool true
