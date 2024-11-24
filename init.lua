@@ -93,6 +93,26 @@ if ENABLE_OTHER_CRAFT then
 		cooktime = 5,
 	})
 
+	core.register_node("kudzu:ladder", {
+		description = "Kudzu Ladder",
+		drawtype = "signlike",
+		tiles = {"kudzu_ladder.png"},
+		inventory_image = "kudzu_ladder.png",
+		wield_image = "kudzu_ladder.png",
+		paramtype = "light",
+		paramtype2 = "wallmounted",
+		sunlight_propagates = true,
+		walkable = false,
+		climbable = true,
+		is_ground_content = false,
+		selection_box = {
+			type = "wallmounted",
+		},
+		groups = {snappy = 3, flammable = 2},
+		legacy_wallmounted = true,
+		sounds = default.node_sound_leaves_defaults(),
+	})
+
 	core.register_craft({
 		output = "kudzu:ladder",
 		recipe = {
@@ -102,26 +122,6 @@ if ENABLE_OTHER_CRAFT then
 		}
 	})
 end
-
-core.register_node("kudzu:ladder", {
-	description = "Kudzu Ladder",
-	drawtype = "signlike",
-	tiles = {"kudzu_ladder.png"},
-	inventory_image = "kudzu_ladder.png",
-	wield_image = "kudzu_ladder.png",
-	paramtype = "light",
-	paramtype2 = "wallmounted",
-	sunlight_propagates = true,
-	walkable = false,
-	climbable = true,
-	is_ground_content = false,
-	selection_box = {
-		type = "wallmounted",
-	},
-	groups = {snappy = 3, flammable = 2},
-	legacy_wallmounted = true,
-	sounds = default.node_sound_leaves_defaults(),
-})
 
 core.register_on_mods_loaded(function()
 	for node_name, node_definition in pairs(core.registered_nodes) do
