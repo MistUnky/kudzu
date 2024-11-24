@@ -1,7 +1,7 @@
-ENABLE_KUDZU_BIOME = core.settings:get_bool("enable_kudzu_biome")
-ENABLE_KUDZU_CRAFT = core.settings:get_bool("enable_kudzu_craft")
-ENABLE_FOOD_CRAFT  = core.settings:get_bool("enable_food_craft") ~= false
-ENABLE_OTHER_CRAFT = core.settings:get_bool("enable_other_craft") ~= false
+ENABLE_KUDZU_BIOME = core.settings:get_bool("enable_kudzu_biome", false)
+ENABLE_KUDZU_CRAFT = core.settings:get_bool("enable_kudzu_craft", false)
+ENABLE_FOOD_CRAFT  = core.settings:get_bool("enable_food_craft", true)
+ENABLE_OTHER_CRAFT = core.settings:get_bool("enable_other_craft", true)
 
 core.register_node("kudzu:kudzu", {
 	description = "Kudzu",
